@@ -1,12 +1,12 @@
 module InMemoryPersistence
 
+open FsToolkit.ErrorHandling
 open Domain
 
 let mutable private feeds: Feed list = []
 
-let readFeeds () =
-    feeds
-    |> Async.result
+let readFeeds () = asyncResult {
+    return feeds }
 
 let readFeed title =
     feeds
@@ -17,10 +17,8 @@ let readFeed title =
         | _  -> sprintf "There are multiple feeds with title '%s'" title |> Error
     |> Async.result
 
-let addFeed feed =
-    if feeds.Length > 10
-        then Error "Database capacity reached"
-    else
-        feeds <- feed :: feeds
-        Ok feeds.Head
-    |> Async.result
+let addFeed feed = asyncResult {
+    do! feeds.Length <= 10 |> Result.requireTrue "Database capacity reached"
+
+    feeds <- feed :: feeds
+}
