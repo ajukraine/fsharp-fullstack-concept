@@ -6,13 +6,20 @@ open Suave.Successful
 open Suave.ServerErrors
 open Suave.RequestErrors
 open FsToolkit.ErrorHandling
+open MBrace.FsPickler.Json
+
+type ApiError = { Error: string }
+
+let jsonSerializer = FsPickler.CreateJsonSerializer(indent = true, omitHeader = true)
+let mapJson = jsonSerializer.PickleToString
 
 let mapAppResult asyncResult context =
     asyncResult
-    |> AsyncResult.map (sprintf "%A" >> OK)
+    |> AsyncResult.map (mapJson >> OK)
     |> AsyncResult.mapError (function
-        | Application.DomainError msg -> BAD_REQUEST msg
-        | Application.PersistenceError _ -> INTERNAL_ERROR "Internal Server Error")
+        | Application.DomainError msg ->  (BAD_REQUEST, msg)
+        | Application.PersistenceError _ -> (INTERNAL_ERROR,  "Internal Server Error" ))
+    |> AsyncResult.mapError (fun (status, error) -> status (mapJson { Error = error }))
     |> AsyncResult.foldResult id id
     |> Async.RunSynchronously
     <| context
