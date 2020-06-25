@@ -3,7 +3,7 @@ module InMemoryPersistence
 open FsToolkit.ErrorHandling
 open Domain
 
-let mutable private feeds: Feed list = []
+let mutable private feeds = List.empty<Feed>
 
 let readFeeds () = asyncResult {
     return feeds }

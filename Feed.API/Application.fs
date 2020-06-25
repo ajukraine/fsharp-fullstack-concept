@@ -21,3 +21,7 @@ let createFeed expireInDays = asyncResult {
 
     return feed
 }
+
+let getAllFeeds () = Persistence.readFeeds() |> AsyncResult.mapError PersistenceError
+
+let getFeedByTitle = Persistence.readFeed >> AsyncResult.mapError DomainError
