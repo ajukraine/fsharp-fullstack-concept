@@ -1,8 +1,4 @@
-﻿open Suave
-
-let app = choose Api.allHandlers
-
-[<EntryPoint>]
+﻿[<EntryPoint>]
 let main argv =
-    startWebServer defaultConfig app
+    ApiSuave.run()
     0

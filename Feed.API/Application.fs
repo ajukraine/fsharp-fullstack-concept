@@ -10,10 +10,12 @@ type AppError =
     | DomainError of string
     | PersistenceError of string
 
-let createFeed expireInDays = asyncResult {
+type CreateFeedDto = { Title : string; ExpireInDays : int }
+
+let createFeed dto = asyncResult {
     let now = DateTime.Now
 
-    let! feed = Feed.create "New feed" now (now.AddDays((float)expireInDays))
+    let! feed = Feed.create dto.Title now (now.AddDays((float)dto.ExpireInDays))
                 |> Result.mapError DomainError
 
     do! Persistence.addFeed feed

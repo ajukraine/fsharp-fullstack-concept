@@ -7,13 +7,13 @@
     <Compile Include="Domain.fs" />
     <Compile Include="InMemoryPersistence.fs" />
     <Compile Include="Application.fs" />
+    <Compile Include="Api.fs" />
     <Compile Include="Api.Suave.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FsPickler" Version="5.3.2" />
-    <PackageReference Include="FsPickler.Json" Version="5.3.2" />
     <PackageReference Include="FsToolkit.ErrorHandling" Version="1.4.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Suave" Version="2.5.6" />
   </ItemGroup>
 </Project>
