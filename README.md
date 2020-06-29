@@ -1,6 +1,6 @@
 # F# fullstack concept 🦎
 
-There is no doubts that F# is a great language, which is surrounded by awesome OSS community. But how much commercial F# projects you could name? Well, yeah...
+There is no doubt that F# is a great language, which is surrounded by awesome OSS community. But how much commercial F# projects you could name? Well, yeah...
 
 The goal of this repository is to demonstrate, that F# can be used in enterprise environment. And not just "can", but is much more appealing for developers than C#.
 
