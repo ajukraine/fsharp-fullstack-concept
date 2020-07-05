@@ -6,6 +6,8 @@ open System
 
 let config = { FsCheckConfig.defaultConfig with maxTest = 10_000 }
 
+let testProp = testPropertyWithConfig config
+
 let ``feed PublishDate should be before ExpiryDate property`` = fun publishDate expiryDate ->
     Feed.create "Some title" publishDate expiryDate |>
         function
@@ -15,7 +17,7 @@ let ``feed PublishDate should be before ExpiryDate property`` = fun publishDate 
 [<Tests>]
 let properties =
     testList "Sample" [
-        testPropertyWithConfig config "Feed PublishDate should be before ExpiryDate" <|
+        testProp "Feed PublishDate should be before ExpiryDate" <|
             ``feed PublishDate should be before ExpiryDate property``
         
         testCase "PublishDate and ExpiryDate can't same" <| fun () ->
