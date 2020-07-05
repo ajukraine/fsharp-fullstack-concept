@@ -29,12 +29,10 @@ let mapToHttpResponse (httpCode, content) =
 let mapAppResult httpCode asyncResult = fun context -> async {
     let! result = asyncResult
 
-    let httpStatus httpCode content = (httpCode, content)
-    
     let response =
         match result with
         | Error appError -> appError |> mapAppError |> mapToApiError |> mapToHttpResponse
-        | Ok res -> res |> httpStatus httpCode |> mapToHttpResponse
+        | Ok res -> (httpCode, res) |> mapToHttpResponse
 
     return! response context
 }

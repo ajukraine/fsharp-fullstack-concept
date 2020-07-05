@@ -12,7 +12,7 @@ type AppError =
 
 type CreateFeedDto = { Title : string; ExpireInDays : int }
 
-let createFeed dto = asyncResult {
+let createFeed (dto : CreateFeedDto) = asyncResult {
     let now = DateTime.Now
 
     let! feed = Feed.create dto.Title now (now.AddDays((float)dto.ExpireInDays))

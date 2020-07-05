@@ -1,6 +1,7 @@
 module Domain
 
 open System
+open FsToolkit.ErrorHandling
 
 type Feed = {
     Title: string
@@ -9,10 +10,12 @@ type Feed = {
 }
 
 module Feed =
-    let private validateDates feed =
-        if feed.PublishDate > feed.ExpiryDate
-            then Error "PublishDate can't be less than ExpiryDate"
-        else Ok feed
+    let private validateDates feed = result {
+        do! feed.PublishDate < feed.ExpiryDate
+            |> Result.requireTrue "PublishDate should be less than ExpiryDate"
+
+        return feed
+    }
     
     let create title publishDate expiryDate =
         {
