@@ -4,7 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <Compile Include="Domain.fs" />
+    <Compile Include="Persistance.Abstractions.fs" />
+    <Compile Include="Persistance.Sql.fs" />
     <Compile Include="InMemoryPersistence.fs" />
     <Compile Include="Application.fs" />
     <Compile Include="Api.fs" />
@@ -12,6 +15,7 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FSharp.Data.SqlClient" Version="2.0.6" />
     <PackageReference Include="FsToolkit.ErrorHandling" Version="1.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Suave" Version="2.5.6" />
