@@ -1,11 +1,8 @@
 module Application
 
 open System
-
 open FsToolkit.ErrorHandling
-
 open Domain
-open Persistance
 
 module Persistence = InMemoryPersistence
 
@@ -15,18 +12,18 @@ type AppError =
 
 type CreateFeedDto = { Title : string; ExpireInDays : int }
 
-let createFeed (insertFeed: InsertFeed) dto = asyncResult {
+let createFeed dto = asyncResult {
     let now = DateTime.Now
 
     let! feed = Feed.create dto.Title now (now.AddDays((float)dto.ExpireInDays))
                 |> Result.mapError DomainError
 
-    do! insertFeed feed
+    do! Persistence.addFeed feed
                 |> AsyncResult.mapError PersistenceError
 
     return feed
 }
 
-let getAllFeeds (getAllFeeds: GetAllFeeds) = getAllFeeds()
+let getAllFeeds () = Persistence.readFeeds() |> AsyncResult.mapError PersistenceError
 
-let getFeedByTitle (getFeedByTitle: GetFeedByTitle) title = getFeedByTitle(title)
+let getFeedByTitle = Persistence.readFeed >> AsyncResult.mapError DomainError
