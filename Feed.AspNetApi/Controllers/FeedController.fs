@@ -1,17 +1,20 @@
 ﻿namespace Feed.AspNetApi.Controllers
 
-open System
-open System.Collections.Generic
-open System.Linq
-open System.Threading.Tasks
 open Microsoft.AspNetCore.Mvc
-open System.Data.SqlClient
 open Domain
 open Persistance
+open Application
+
+// record types should be mutalbe to be model binded as action method param
+[<CLIMutable>]
+type CreateFeedRequest = {
+    Title: string;
+    ExpireInDays: int;
+}
 
 [<Route("api/[controller]")>]
 [<ApiController>]
-type FeedController (getAllFeeds: GetAllFeeds) =
+type FeedController (getAllFeeds: GetAllFeeds, insertFeed: InsertFeed) =
     inherit ControllerBase()
 
     [<HttpGet>]
@@ -26,8 +29,13 @@ type FeedController (getAllFeeds: GetAllFeeds) =
         ActionResult<string>(value)
 
     [<HttpPost>]
-    member this.Post([<FromBody>] value:string) =
-        ()
+    member this.Post([<FromBody>] request: CreateFeedRequest) = async {
+        let! result = Application.createFeed insertFeed { Title = request.Title; ExpireInDays = request.ExpireInDays }
+
+        return (match result with 
+            | Ok some -> this.Ok(some) :> IActionResult
+            | Error -> this.BadRequest() :> IActionResult)
+    }
 
     [<HttpPut("{id}")>]
     member this.Put(id:int, [<FromBody>] value:string ) =

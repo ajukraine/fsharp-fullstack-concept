@@ -29,6 +29,7 @@ type Startup private () =
                 conneciton.Open()
                 conneciton)
             .AddTransient<GetAllFeeds>(Func<IServiceProvider, GetAllFeeds>(fun (sp: IServiceProvider) -> Persistance.Sql.getAllFeeds (sp.GetService<SqlConnection>())))
+            .AddTransient<InsertFeed>(Func<IServiceProvider, InsertFeed>(fun (sp: IServiceProvider) -> Persistance.Sql.insertFeed (sp.GetService<SqlConnection>())))
             .AddMvc(fun opt -> opt.EnableEndpointRouting <- false) |> ignore
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
